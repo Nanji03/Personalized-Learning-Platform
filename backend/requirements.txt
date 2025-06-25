@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pymongo
+langchain
+chromadb
+openai
+python-dotenv
+sqlmodel
+passlib[bcrypt]
+python-jose

@@ -1,0 +1,99 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+.header {
+  background: #162447;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 2rem 2rem 1rem 2rem;
+}
+
+.favicon {
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border-radius: 50%;
+  margin-right: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #162447;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.main-body {
+  display: flex;
+  flex: 1;
+  background: #f5f6fa;
+}
+
+.sidebar {
+  background: #eaeaea;
+  min-width: 220px;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: #222;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.profile-label {
+  font-weight: bold;
+  color: #222;
+}
+
+.navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navigation li {
+  margin: 1rem 0;
+  cursor: pointer;
+  color: #162447;
+  font-weight: 500;
+}
+
+.main-content {
+  flex: 1;
+  margin: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(22,36,71,0.08);
+  padding: 2rem;
+  min-height: 300px;
+}
+
+.footer {
+  background: #ccc;
+  color: #222;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}

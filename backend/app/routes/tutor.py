@@ -4,6 +4,9 @@ from typing import List, Dict
 from datetime import datetime
 from app.utils.db import db  # Uses your MongoDB client setup
 from bson.objectid import ObjectId
+##from app.utils.your_module import generate_ai_answer
+def generate_ai_answer(prompt: str) -> str:
+    return "This is a mock AI answer for: " + prompt
 
 router = APIRouter(prefix="/tutor", tags=["tutor"])
 
@@ -45,7 +48,7 @@ def get_history_item(history_id: str):
         raise HTTPException(status_code=404, detail="History entry not found")
     return TutorResponse(id=str(entry["_id"]), answer=entry["answer"])
 
-@router.get("/flashcards/{user_id}", response_model=Dict[str, List[Flashcard]])
+@router.get("/flashcards/{user_id}")
 def get_flashcards_by_topic(user_id: str):
     entries = db.tutor_history.find({"user_id": user_id})
     result = {}
@@ -53,5 +56,9 @@ def get_flashcards_by_topic(user_id: str):
         topic = e.get("topic", "Unknown")
         if topic not in result:
             result[topic] = []
-        result[topic].append(Flashcard(question=e["prompt"], answer=e["answer"]))
+        result[topic].append({
+            "question": e["prompt"],
+            "answer": e["answer"],
+            "_id": str(e["_id"]),  # include for frontend review tracking
+        })
     return result

@@ -1,12 +1,21 @@
 from fastapi import FastAPI
 from app.routes import user, course, tutor, quiz, progress, recommend
 import logging
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI(
     title="Personalized Learning Platform Backend",
     description="Backend API for adaptive tutor, quiz, progress tracking, and recommendations"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Or ["*"] for dev, restrict in production!
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Include routers for modular endpoints
 app.include_router(user.router)
 app.include_router(course.router)

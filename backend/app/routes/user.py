@@ -20,10 +20,3 @@ def login_user(email: str, password: str):
     # TODO: Add authentication logic
     return {"msg": f"User {email} logged in (mock response)"}
 
-# from fastapi import APIRouter
-
-# router = APIRouter()
-
-# @router.get("/test-alive")
-# def test_alive():
-#     return {"status": "ok"}

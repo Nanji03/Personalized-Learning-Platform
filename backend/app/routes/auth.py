@@ -1,9 +1,3 @@
-# Summary
-# Store users in MongoDB with hashed passwords.
-# Use JWT for login sessions (no need for OAuth).
-# Use user’s JWT or user_id on all requests to fetch user’s history, flashcards, etc.
-
-
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from passlib.context import CryptContext
@@ -45,7 +39,6 @@ def login(req: LoginRequest):
     user = db.users.find_one({"username": req.username})
     if not user or not pwd_context.verify(req.password, user["hashed_password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    # Issue JWT token
     token_data = {
         "user_id": str(user["_id"]),
         "username": user["username"]

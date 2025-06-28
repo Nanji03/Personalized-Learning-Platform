@@ -16,6 +16,7 @@ import ProgressDashboard from "./components/ProgressDashboard";
 import NotesDashboard from "./components/NotesDashboard";
 import NoteEditor from "./components/NoteEditor";
 import NoteViewer from "./components/NoteViewer";
+import Tutor from "./components/Tutor";
 import "./App.css";
 
 // Helper to extract userId from JWT token
@@ -62,6 +63,7 @@ function App() {
             {/* Flashcards route */}
             <Route path="/flashcards" element={<FlashcardReview token={token} userId={userId} />} />
             <Route path="/progress" element={<ProgressDashboard token={token} userId={userId} />} />
+            <Route path="/tutor" element={<Tutor />} /> {/* Tutor route */}
 
             {/* Redirect all unknown routes to home */}            
             <Route path="*" element={<Navigate to="/" />} />

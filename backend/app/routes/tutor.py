@@ -17,6 +17,7 @@ class PromptRequest(BaseModel):
 
 class TutorResponse(BaseModel):
     id: str
+    prompt: str
     answer: str
 
 class Flashcard(BaseModel):
@@ -34,12 +35,12 @@ def ask_tutor(request: PromptRequest):
         "created_at": datetime.utcnow(),
     }
     result = db.tutor_history.insert_one(doc)
-    return TutorResponse(id=str(result.inserted_id), answer=answer)
+    return TutorResponse(id=str(result.inserted_id), prompt=request.prompt, answer=answer)
 
 @router.get("/history", response_model=List[TutorResponse])
 def get_history(user_id: str = Query(...)):
     entries = db.tutor_history.find({"user_id": user_id})
-    return [TutorResponse(id=str(e["_id"]), answer=e["answer"]) for e in entries]
+    return [TutorResponse(id=str(e["_id"]), prompt=e["prompt"], answer=e["answer"]) for e in entries]
 
 @router.get("/history/{history_id}", response_model=TutorResponse)
 def get_history_item(history_id: str):

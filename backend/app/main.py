@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routes import user, course, tutor, quiz, progress, recommend
+from app.routes import  users,course, tutor, quiz, progress, recommend, auth, notes
 import logging
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -17,12 +17,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 # Include routers for modular endpoints
-app.include_router(user.router)
+app.include_router(auth.router)
+app.include_router(users.router)
 app.include_router(course.router)
 app.include_router(tutor.router)
 app.include_router(quiz.router)
 app.include_router(progress.router)
 app.include_router(recommend.router)
+app.include_router(notes.router)
 
 @app.get("/")
 def read_root():

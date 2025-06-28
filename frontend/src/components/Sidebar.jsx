@@ -38,8 +38,11 @@ function Sidebar() {
             <Link to="/flashcards" className={isActive("/flashcards")}>Flashcards</Link>
           </li>
           <li>
-            <Link to="/settings" className={isActive("/settings")}>Settings</Link>
+            <Link to="/tutor" className={isActive("/tutor")}>Tutor</Link>
           </li>
+          {/* <li>
+            <Link to="/settings" className={isActive("/settings")}>Settings</Link>
+          </li> */}
 
         </ul>
       </nav>

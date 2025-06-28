@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function Register({ onRegistered }) {
-  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
@@ -12,7 +12,7 @@ export default function Register({ onRegistered }) {
     setError(null);
     setSuccess(false);
     try {
-      const res = await fetch("http://localhost:8000/auth/register", {
+      const res = await fetch("http://localhost:8000/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -28,7 +28,7 @@ export default function Register({ onRegistered }) {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Register</h2>
-      <input name="username" placeholder="Username" value={form.username} onChange={handleChange} required />
+      <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
       <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
       <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required />
       <button type="submit">Sign Up</button>

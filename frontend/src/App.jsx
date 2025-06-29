@@ -63,8 +63,7 @@ function App() {
             {/* Flashcards route */}
             <Route path="/flashcards" element={<FlashcardReview token={token} userId={userId} />} />
             <Route path="/progress" element={<ProgressDashboard token={token} userId={userId} />} />
-            <Route path="/tutor" element={<Tutor />} /> {/* Tutor route */}
-
+            <Route path="/tutor" element={<Tutor userId={userId} />} />
             {/* Redirect all unknown routes to home */}            
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

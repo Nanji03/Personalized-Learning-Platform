@@ -4,10 +4,28 @@ from typing import List, Dict
 from datetime import datetime
 from app.utils.db import db  # Uses your MongoDB client setup
 from bson.objectid import ObjectId
-##from app.utils.your_module import generate_ai_answer
-def generate_ai_answer(prompt: str) -> str:
-    return "This is a mock AI answer for: " + prompt
+import openai
+import os
+import openai
 
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+def generate_ai_answer(prompt: str) -> str:
+    if not client.api_key:
+        return "Error: OpenAI API key not set."
+    try:
+        chat_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful AI tutor."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=512,
+            temperature=0.7
+        )
+        return chat_response.choices[0].message.content.strip()
+    except Exception as e:
+        return f"Error generating AI answer: {e}"
 router = APIRouter(prefix="/tutor", tags=["tutor"])
 
 class PromptRequest(BaseModel):

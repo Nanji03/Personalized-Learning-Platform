@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function Tutor() {
+function Tutor({userId}) {
   const [prompt, setPrompt] = useState("");
   const [topic, setTopic] = useState("");
   const [answer, setAnswer] = useState(null);
@@ -10,35 +10,26 @@ function Tutor() {
   const [flashcards, setFlashcards] = useState({});
   const [showFlashcards, setShowFlashcards] = useState(false);
 
-  <ul>
-  {history.map((h) => (
-    <li key={h.id}>
-      <strong>Q:</strong> {h.prompt}<br/>
-      <strong>A:</strong> {h.answer}
-    </li>
-  ))}
-  </ul>
-
   // Replace with actual user ID from your auth/user context
   //const user_id = "your_user_id_here";
 
   // Fetch tutor history on mount
   useEffect(() => {
-    if (user_id) {
+    if (userId) {
       axios
-        .get(`/tutor/history?user_id=${user_id}`)
+        .get(`/tutor/history?user_id=${userId}`)
         .then((res) => setHistory(res.data))
         .catch((err) => console.error("Failed to fetch history", err));
     }
-  }, [user_id]);
+  }, [userId]);
 
   const handleAsk = async (e) => {
     e.preventDefault();
     setLoading(true);
     setAnswer(null);
     try {
-      const res = await axios.post("/tutor/ask", {
-        user_id,
+      const res = await axios.post("http://localhost:8000/tutor/ask", {
+        user_id: userId,
         prompt,
         topic,
       });

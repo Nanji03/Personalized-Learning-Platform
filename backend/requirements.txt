@@ -8,3 +8,5 @@ python-dotenv
 sqlmodel
 passlib[bcrypt]
 python-jose
+pytest
+httpx

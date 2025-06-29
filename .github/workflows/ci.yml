@@ -26,9 +26,9 @@ jobs:
         run: |
           pip install flake8
           flake8 app || true
-      # Uncomment if you add tests
-      # - name: Run backend tests
-      #   run: pytest
+      #Uncomment if you add tests
+      - name: Run backend tests
+        run: pytest
 
   frontend:
     runs-on: ubuntu-latest

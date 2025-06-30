@@ -19,7 +19,7 @@ export default function CourseList() {
 
   return (
     <div style={{ maxWidth: 700, margin: "2rem auto" }}>
-      <h2>Courses</h2>
+      <h2><b>Courses</b></h2>
       <ul>
         {courses.map(course => (
           <li key={course.id} style={{ marginBottom: "1rem" }}>

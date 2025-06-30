@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Dict
 from datetime import datetime, timedelta
 from app.utils.db import db
 
@@ -12,8 +12,34 @@ class DailyProgress(BaseModel):
 
 class ProgressResponse(BaseModel):
     user_id: str
-    metric: str  # e.g. "quiz_attempts", "flashcards_reviewed"
+    metric: str
     data: List[DailyProgress]
+    summary: Optional[Dict[str, int]] = None  # E.g. total, average
+
+def fetch_metric(user_id, metric, start_date, today, date_list):
+    # Map metric to db collection and date field
+    metric_map = {
+        "quiz_attempts": ("quiz_attempts", "attempted_at"),
+        "flashcards_reviewed": ("flashcard_reviews", "reviewed_at"),
+    }
+    if metric not in metric_map:
+        raise HTTPException(status_code=400, detail="Unsupported metric")
+    collection_name, date_field = metric_map[metric]
+    entries = db[collection_name].find({
+        "user_id": user_id,
+        date_field: {
+            "$gte": datetime.combine(start_date, datetime.min.time()),
+            "$lte": datetime.combine(today, datetime.max.time())
+        }
+    })
+    progress_dict = {d: 0 for d in date_list}
+    for entry in entries:
+        d = entry.get(date_field)
+        if d:
+            date_str = d.strftime("%Y-%m-%d")
+            if date_str in progress_dict:
+                progress_dict[date_str] += 1
+    return progress_dict
 
 @router.get("/", response_model=ProgressResponse)
 def get_progress(
@@ -23,46 +49,16 @@ def get_progress(
 ):
     """
     Returns the user's daily progress (e.g., quiz attempts, flashcards reviewed)
-    as a time series suitable for a line graph.
+    as a time series suitable for a line graph, plus summary stats.
     """
-    # Determine the date range
     today = datetime.utcnow().date()
     start_date = today - timedelta(days=days-1)
     date_list = [(start_date + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(days)]
-    progress_dict = {d: 0 for d in date_list}
-
-    # Example: Count quiz attempts per day from 'quiz_attempts' collection
-    if metric == "quiz_attempts":
-        entries = db.quiz_attempts.find({
-            "user_id": user_id,
-            "attempted_at": {
-                "$gte": datetime.combine(start_date, datetime.min.time()),
-                "$lte": datetime.combine(today, datetime.max.time())
-            }
-        })
-        for entry in entries:
-            d = entry.get("attempted_at")
-            if d:
-                date_str = d.strftime("%Y-%m-%d")
-                if date_str in progress_dict:
-                    progress_dict[date_str] += 1
-    # Example: Count flashcards reviewed per day from 'flashcard_reviews' collection
-    elif metric == "flashcards_reviewed":
-        entries = db.flashcard_reviews.find({
-            "user_id": user_id,
-            "reviewed_at": {
-                "$gte": datetime.combine(start_date, datetime.min.time()),
-                "$lte": datetime.combine(today, datetime.max.time())
-            }
-        })
-        for entry in entries:
-            d = entry.get("reviewed_at")
-            if d:
-                date_str = d.strftime("%Y-%m-%d")
-                if date_str in progress_dict:
-                    progress_dict[date_str] += 1
-    else:
-        raise HTTPException(status_code=400, detail="Unsupported metric")
-
+    progress_dict = fetch_metric(user_id, metric, start_date, today, date_list)
     data = [DailyProgress(date=d, value=progress_dict[d]) for d in date_list]
-    return ProgressResponse(user_id=user_id, metric=metric, data=data)
+    # Calculate summary stats
+    summary = {
+        "total": sum(progress_dict.values()),
+        "average": round(sum(progress_dict.values()) / days, 2)
+    }
+    return ProgressResponse(user_id=user_id, metric=metric, data=data, summary=summary)

@@ -9,6 +9,7 @@ const METRICS = [
 export default function ProgressDashboard({ token, userId }) {
   const [metric, setMetric] = useState(METRICS[0].value);
   const [data, setData] = useState([]);
+  const [summary, setSummary] = useState({});
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState("");
 
@@ -23,17 +24,20 @@ export default function ProgressDashboard({ token, userId }) {
         if (!res.ok) throw new Error("Failed to load progress.");
         return res.json();
       })
-      .then(json => setData(json.data))
+      .then(json => {
+        setData(json.data);
+        setSummary(json.summary || {});
+      })
       .catch(() => setMsg("Could not load progress data."))
       .finally(() => setLoading(false));
   }, [userId, metric, token]);
 
   return (
-    <div style={{ maxWidth: 800, margin: "2rem auto" }}>
-      <h2>Your Progress</h2>
-      <div>
+    <div style={{ maxWidth: 900, margin: "2rem auto", background: "#fff", borderRadius: 12, boxShadow: "0 4px 20px rgba(22,36,71,0.08)", padding: "2rem" }}>
+      <h2 className="section-title">Your Progress</h2>
+      <div style={{ marginBottom: 20 }}>
         <label>
-          Metric:&nbsp;
+          <span style={{ fontWeight: 600, color: "#162447" }}>Metric:&nbsp;</span>
           <select value={metric} onChange={e => setMetric(e.target.value)}>
             {METRICS.map(m => (
               <option key={m.value} value={m.value}>{m.label}</option>
@@ -41,6 +45,12 @@ export default function ProgressDashboard({ token, userId }) {
           </select>
         </label>
       </div>
+      {summary && (
+        <div style={{ marginBottom: 16, color: "#162447" }}>
+          <b>Total:</b> {summary.total ?? 0} &nbsp; | &nbsp;
+          <b>Average/Day:</b> {summary.average ?? 0}
+        </div>
+      )}
       {loading && <div>Loading progress...</div>}
       {msg && <div style={{ color: "red" }}>{msg}</div>}
       {!loading && !msg && (
@@ -51,7 +61,7 @@ export default function ProgressDashboard({ token, userId }) {
             <YAxis allowDecimals={false} />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="value" name="Count" stroke="#8884d8" strokeWidth={2} activeDot={{ r: 8 }} />
+            <Line type="monotone" dataKey="value" name="Count" stroke="#162447" strokeWidth={3} activeDot={{ r: 8 }} />
           </LineChart>
         </ResponsiveContainer>
       )}

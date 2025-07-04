@@ -1,0 +1,41 @@
+# Node (frontend)
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.DS_Store
+
+# Python (backend)
+backend/venv/
+backend/__pycache__/
+backend/.env
+backend/.DS_Store
+
+# Python bytecode
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# VSCode
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test output
+backend/.pytest_cache/
+backend/.coverage
+coverage/
+
+# Environment
+.env
+.env.*
+
+# Misc
+*.swp
+*.swo
+.idea/

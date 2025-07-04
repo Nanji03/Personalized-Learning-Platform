@@ -1,87 +1,42 @@
-import React, { useState } from "react";
-
-const DEMO_QUESTIONS = [
-  {
-    question: "What is the capital of France?",
-    options: ["Berlin", "Madrid", "Paris", "Rome"],
-    correct_answer: "Paris"
-  },
-  {
-    question: "What is 2 + 2?",
-    options: ["3", "4", "5", "2"],
-    correct_answer: "4"
-  }
-];
+import React from "react";
 
 function MainContent() {
-  const [idx, setIdx] = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [showAnswer, setShowAnswer] = useState(false);
-
-  const current = DEMO_QUESTIONS[idx];
-
-  function handleOption(option) {
-    setSelected(option);
-    setShowAnswer(true);
-  }
-
-  function next() {
-    setSelected(null);
-    setShowAnswer(false);
-    setIdx((i) => (i + 1) % DEMO_QUESTIONS.length);
-  }
-
   return (
     <main className="main-content">
-      <h2 style={{ marginBottom: 16 }}>{current.question}</h2>
-      <div style={{ width: "100%" }}>
-        {current.options.map(option => (
-          <button
-            key={option}
-            onClick={() => handleOption(option)}
-            disabled={showAnswer}
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "10px",
-              borderRadius: "var(--radius, 8px)",
-              border: "none",
-              background: selected === option
-                ? (option === current.correct_answer ? "var(--accent, #A3E635)" : "var(--danger, #F87171)")
-                : "var(--primary, #E0E7FF)",
-              color: "#181818",
-              fontWeight: 600,
-              cursor: showAnswer ? "not-allowed" : "pointer",
-              opacity: showAnswer && selected !== option ? 0.6 : 1,
-              transition: "background 0.2s, color 0.2s"
-            }}
-          >
-            {option}
-          </button>
-        ))}
+      <h1>Welcome to the Personalized Learning System</h1>
+      <p style={{ fontSize: "1.1rem", marginBottom: "2rem", maxWidth: 700 }}>
+        Your all-in-one platform to accelerate your learning with personalized tools. Track your progress, take quizzes, manage notes, review flashcards, and get AI-powered tutoring—all in one place.
+      </p>
+      <h2>What can you do here?</h2>
+      <ol style={{ lineHeight: 2, fontSize: "1.07rem", maxWidth: 700 }}>
+        <li>
+          <strong>Home:</strong> This page! See an overview and get started.
+        </li>
+        <li>
+          <strong>Courses:</strong> Browse available courses and dive into their sections and materials.
+        </li>
+        <li>
+          <strong>Notes:</strong> Create, organize, and review your learning notes.
+        </li>
+        <li>
+          <strong>Quiz:</strong> Generate and take quizzes on topics you’re studying to test your knowledge.
+        </li>
+        <li>
+          <strong>Recommend:</strong> Get personalized recommendations for what to study next based on your progress.
+        </li>
+        <li>
+          <strong>Progress:</strong> Visualize your learning journey with charts and statistics.
+        </li>
+        <li>
+          <strong>Flashcards:</strong> Review and practice using smart flashcards on various topics.
+        </li>
+        <li>
+          <strong>Tutor:</strong> Ask our AI Tutor questions and get instant, helpful answers.
+        </li>
+      </ol>
+      <div style={{ marginTop: "2.5rem", color: "#555", fontSize: "1.03rem" }}>
+         Ready to get started? Use the sidebar to explore each feature at your own pace!
       </div>
-      {showAnswer && (
-        <div style={{ marginTop: 20, color: selected === current.correct_answer ? "var(--accent, #A3E635)" : "var(--danger, #F87171)" }}>
-          {selected === current.correct_answer ? "Correct!" : `Incorrect. Correct answer: ${current.correct_answer}`}
-        </div>
-      )}
-      {showAnswer && (
-        <button
-          onClick={next}
-          style={{
-            marginTop: 28,
-            padding: "10px 28px",
-            borderRadius: "var(--radius, 8px)",
-            border: "none",
-            background: "var(--primary, #E0E7FF)",
-            color: "#181818",
-            fontWeight: 700,
-            cursor: "pointer"
-          }}
-        >
-          Next
-        </button>
-      )}
     </main>
   );
 }
